@@ -1,0 +1,133 @@
+﻿
+-- --------------------------------------------------
+-- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
+-- --------------------------------------------------
+-- Date Created: 05/22/2019 23:12:19
+-- Generated from EDMX file: C:\Users\Kuba\source\repos\Test_21032019\Test_21032019\MyDBModel.edmx
+-- --------------------------------------------------
+
+SET QUOTED_IDENTIFIER OFF;
+GO
+USE [testowa];
+GO
+IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
+GO
+
+-- --------------------------------------------------
+-- Dropping existing FOREIGN KEY constraints
+-- --------------------------------------------------
+
+IF OBJECT_ID(N'[dbo].[FK_uzytkownicy_komputery]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[komputery] DROP CONSTRAINT [FK_uzytkownicy_komputery];
+GO
+
+-- --------------------------------------------------
+-- Dropping existing tables
+-- --------------------------------------------------
+
+IF OBJECT_ID(N'[dbo].[komputery]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[komputery];
+GO
+IF OBJECT_ID(N'[dbo].[loginy]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[loginy];
+GO
+IF OBJECT_ID(N'[dbo].[sysdiagrams]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[sysdiagrams];
+GO
+IF OBJECT_ID(N'[dbo].[uzytkownicy]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[uzytkownicy];
+GO
+
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'komputeries'
+CREATE TABLE [dbo].[komputeries] (
+    [komputerId] int IDENTITY(1,1) NOT NULL,
+    [firma] nvarchar(50)  NOT NULL,
+    [dostawca] nvarchar(50)  NOT NULL,
+    [zailacz] int  NOT NULL,
+    [uzykownikId] int  NOT NULL
+);
+GO
+
+-- Creating table 'loginies'
+CREATE TABLE [dbo].[loginies] (
+    [login] nvarchar(50)  NOT NULL,
+    [password] nvarchar(300)  NOT NULL,
+    [email] nchar(300)  NULL
+);
+GO
+
+-- Creating table 'sysdiagrams'
+CREATE TABLE [dbo].[sysdiagrams] (
+    [name] nvarchar(128)  NOT NULL,
+    [principal_id] int  NOT NULL,
+    [diagram_id] int IDENTITY(1,1) NOT NULL,
+    [version] int  NULL,
+    [definition] varbinary(max)  NULL
+);
+GO
+
+-- Creating table 'uzytkownicies'
+CREATE TABLE [dbo].[uzytkownicies] (
+    [id] int IDENTITY(1,1) NOT NULL,
+    [Imie] varchar(50)  NOT NULL,
+    [Nazwisko] varchar(50)  NOT NULL,
+    [Wiek] int  NOT NULL,
+    [passwordreset] nvarchar(250)  NULL,
+    [email] nvarchar(250)  NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [komputerId] in table 'komputeries'
+ALTER TABLE [dbo].[komputeries]
+ADD CONSTRAINT [PK_komputeries]
+    PRIMARY KEY CLUSTERED ([komputerId] ASC);
+GO
+
+-- Creating primary key on [login] in table 'loginies'
+ALTER TABLE [dbo].[loginies]
+ADD CONSTRAINT [PK_loginies]
+    PRIMARY KEY CLUSTERED ([login] ASC);
+GO
+
+-- Creating primary key on [diagram_id] in table 'sysdiagrams'
+ALTER TABLE [dbo].[sysdiagrams]
+ADD CONSTRAINT [PK_sysdiagrams]
+    PRIMARY KEY CLUSTERED ([diagram_id] ASC);
+GO
+
+-- Creating primary key on [id] in table 'uzytkownicies'
+ALTER TABLE [dbo].[uzytkownicies]
+ADD CONSTRAINT [PK_uzytkownicies]
+    PRIMARY KEY CLUSTERED ([id] ASC);
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [uzykownikId] in table 'komputeries'
+ALTER TABLE [dbo].[komputeries]
+ADD CONSTRAINT [FK_uzytkownicy_komputery]
+    FOREIGN KEY ([uzykownikId])
+    REFERENCES [dbo].[uzytkownicies]
+        ([id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_uzytkownicy_komputery'
+CREATE INDEX [IX_FK_uzytkownicy_komputery]
+ON [dbo].[komputeries]
+    ([uzykownikId]);
+GO
+
+-- --------------------------------------------------
+-- Script has ended
+-- --------------------------------------------------
