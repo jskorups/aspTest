@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Test_21032019.Models;
+using System.Xml;
 
 
 namespace Test_21032019.Controllers
@@ -38,31 +39,37 @@ namespace Test_21032019.Controllers
                     userNew.guid = guidPotwierdzenie.ToString();
                     userNew.SaveToDatabase(); // -> F11
 
-                    // wysylka maila
-
                     string url = System.Web.HttpRuntime.AppDomainAppVirtualPath + Url.Action("Aktywacja")+$"?kod={guidPotwierdzenie.ToString()}";
+             
+                    string subject = "Link aktywacyjny";
 
-
-                    /*
-                     * 
-                     * 1. wysylka mailem jako body
-                     * 2. tworzyc akcje aktywacji , kod bedzie parametrem
-                     * 3. update aktywny na treu , znajdujac taki guid
-                     * 4. zrobic widok ze konto aktywne przejdz o logowania
-                     * */
-                
-
-
-                    return RedirectToAction("Logowanie");
+                    emailClass.mailSend(userNew.email, url, subject);
+                    return View("Zarejestrowano");
                 }
             }
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             return View(userNew);
         }
+        public ActionResult Aktywacja(string kod)
+        {
+            testowaEntities ent = new testowaEntities();
+            var user = ent.loginies.Where(x => x.guid == kod).FirstOrDefault();
+            if (user != null)
+            {
+                user.aktywny = true;
+                return View("Aktywacja");
+            }
+            else
+            {
+                return View("Nieudanaaktywacja");
+            }
+        }
+
+
 
         // Logowanie
         //???

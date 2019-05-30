@@ -366,6 +366,9 @@
     <Content Include="Views\Login\PodanieGuidu.cshtml" />
     <Content Include="Views\Login\SetNewPassword.cshtml" />
     <Content Include="Views\View.cshtml" />
+    <Content Include="Views\Login\Zarejestrowano.cshtml" />
+    <Content Include="Views\Login\Aktywacja.cshtml" />
+    <Content Include="Views\Login\Nieudanaaktywacja.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

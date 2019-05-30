@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Configuration;
 using System.Net.Mail;
 using System.Web;
+using System.Web.Configuration;
 
 namespace Test_21032019
 {
@@ -14,15 +16,14 @@ namespace Test_21032019
 
             try
             {
-                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-                smtpClient.EnableSsl = true;
-                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtpClient.UseDefaultCredentials = true;
-                smtpClient.Credentials = new NetworkCredential("kowalski.jan567890@gmail.com", "alamakota123");
+                System.Configuration.Configuration config = WebConfigurationManager.OpenWebConfiguration(
+                HttpContext.Current.Request.ApplicationPath);
+                MailSettingsSectionGroup settings =
+                    (MailSettingsSectionGroup)config.GetSectionGroup("system.net/mailSettings");
+
+                SmtpClient smtpClient = new SmtpClient();
+                smtpClient.Credentials = new NetworkCredential(settings.Smtp.Network.UserName, settings.Smtp.Network.Password);
                 MailMessage msg = new MailMessage();
-                //string path = HttpContext.Server.MapPath("~/Content/template/guidMailBody.html");
-                //string body = System.IO.File.ReadAllText(path);
-                //body = body.Replace("{guid}", nowyGuid.ToString());
                 msg.Body = body;
                 msg.IsBodyHtml = true;
                 msg.Subject = subject;
